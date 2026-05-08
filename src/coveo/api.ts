@@ -2,6 +2,7 @@ import { getOrganizationEndpoints } from '@coveo/headless';
 import { COVEO_CONFIG, POKEMON_FIELDS } from './config';
 
 export interface PokemonResultRaw {
+  permanentid?: string;
   pokedexnumber?: number | string;
   pokemontype?: string | string[];
   pokemongeneration?: string | number;
@@ -30,15 +31,15 @@ interface CoveoSearchResponse {
   totalCount: number;
 }
 
-export async function searchPokemonByPokedexNumber(
-  pokedexNumber: string,
+export async function searchPokemonByPermanentId(
+  permanentId: string,
 ): Promise<PokemonResult | null> {
   const platform = getOrganizationEndpoints(COVEO_CONFIG.organizationId).platform;
   const url = `${platform}/rest/search/v2`;
   const body = {
-    aq: `@pokedexnumber==${JSON.stringify(pokedexNumber)}`,
+    aq: `@permanentid==${JSON.stringify(permanentId)}`,
     numberOfResults: 1,
-    fieldsToInclude: [...POKEMON_FIELDS],
+    fieldsToInclude: [...POKEMON_FIELDS, 'permanentid'],
   };
 
   const res = await fetch(url, {

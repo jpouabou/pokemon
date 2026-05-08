@@ -6,7 +6,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<SearchPage />} />
-      <Route path="/pokemon/:id" element={<PokemonDetail />} />
+      <Route path="/pokemon/:permanentid" element={<PokemonDetail />} />
     </Routes>
   );
 }

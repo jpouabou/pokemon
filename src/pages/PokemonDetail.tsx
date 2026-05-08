@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import type { Result } from '@coveo/headless';
 import {
-  searchPokemonByPokedexNumber,
+  searchPokemonByPermanentId,
   type PokemonResultRaw,
 } from '../coveo/api';
+import { PokemonImage } from '../components/PokemonImage';
 import {
   asArray,
   formatPokedexNumber,
@@ -25,7 +26,7 @@ interface NavState {
 }
 
 export function PokemonDetail() {
-  const { id } = useParams<{ id: string }>();
+  const { permanentid } = useParams<{ permanentid: string }>();
   const location = useLocation();
   const navResult = (location.state as NavState | null)?.result ?? null;
 
@@ -34,10 +35,10 @@ export function PokemonDetail() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (navResult || !id) return;
+    if (navResult || !permanentid) return;
     let cancelled = false;
     setLoading(true);
-    searchPokemonByPokedexNumber(id)
+    searchPokemonByPermanentId(permanentid)
       .then((res) => {
         if (cancelled) return;
         if (!res) {
@@ -56,7 +57,7 @@ export function PokemonDetail() {
     return () => {
       cancelled = true;
     };
-  }, [id, navResult]);
+  }, [permanentid, navResult]);
 
   if (loading) {
     return (
@@ -106,15 +107,11 @@ export function PokemonDetail() {
               <span className="absolute top-4 right-6 text-sm font-mono text-slate-500 tabular-nums">
                 {formatPokedexNumber(raw.pokedexnumber)}
               </span>
-              {raw.pokemonimage ? (
-                <img
-                  src={raw.pokemonimage}
-                  alt={result.title}
-                  className="w-full max-w-xs object-contain drop-shadow-2xl"
-                />
-              ) : (
-                <div className="text-slate-400 text-6xl">?</div>
-              )}
+              <PokemonImage
+                src={raw.pokemonimage}
+                alt={result.title}
+                className="w-full max-w-xs object-contain drop-shadow-2xl"
+              />
             </div>
 
             <div className="p-6 sm:p-8">

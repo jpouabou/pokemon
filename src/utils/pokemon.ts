@@ -43,3 +43,9 @@ export function pokedexId(raw: PokemonResultRaw): string | null {
   if (v === undefined || v === null || v === '') return null;
   return String(v);
 }
+
+export function permanentId(raw: PokemonResultRaw): string | null {
+  const v = raw.permanentid;
+  if (v === undefined || v === null || v === '') return null;
+  return String(v);
+}

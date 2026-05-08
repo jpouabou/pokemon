@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
 import type { Result } from '@coveo/headless';
 import type { PokemonResultRaw } from '../coveo/api';
+import { PokemonImage } from './PokemonImage';
 import {
   asArray,
   formatPokedexNumber,
-  pokedexId,
+  permanentId,
   typeBadge,
 } from '../utils/pokemon';
 
@@ -14,9 +15,8 @@ interface Props {
 
 export function PokemonCard({ result }: Props) {
   const raw = result.raw as PokemonResultRaw;
-  const id = pokedexId(raw);
+  const pid = permanentId(raw);
   const types = asArray(raw.pokemontype);
-  const image = raw.pokemonimage;
 
   const card = (
     <article className="group bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all overflow-hidden h-full flex flex-col">
@@ -24,16 +24,11 @@ export function PokemonCard({ result }: Props) {
         <span className="absolute top-2 right-3 text-xs font-mono text-slate-400 tabular-nums">
           {formatPokedexNumber(raw.pokedexnumber)}
         </span>
-        {image ? (
-          <img
-            src={image}
-            alt={result.title}
-            loading="lazy"
-            className="w-3/4 h-3/4 object-contain group-hover:scale-110 transition-transform duration-300"
-          />
-        ) : (
-          <div className="text-slate-300 text-4xl">?</div>
-        )}
+        <PokemonImage
+          src={raw.pokemonimage}
+          alt={result.title}
+          className="w-3/4 h-3/4 object-contain group-hover:scale-110 transition-transform duration-300"
+        />
       </div>
       <div className="p-4 flex-1 flex flex-col">
         <h3 className="font-semibold text-slate-900 capitalize text-base truncate">
@@ -53,10 +48,14 @@ export function PokemonCard({ result }: Props) {
     </article>
   );
 
-  if (!id) return card;
+  if (!pid) return card;
 
   return (
-    <Link to={`/pokemon/${id}`} state={{ result }} className="block h-full">
+    <Link
+      to={`/pokemon/${encodeURIComponent(pid)}`}
+      state={{ result }}
+      className="block h-full"
+    >
       {card}
     </Link>
   );

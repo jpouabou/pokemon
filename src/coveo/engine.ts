@@ -6,6 +6,7 @@ import {
   buildPager,
   buildResultsPerPage,
   getOrganizationEndpoints,
+  loadAdvancedSearchQueryActions,
   type SearchEngine,
   type SearchBox,
   type Facet,
@@ -41,6 +42,9 @@ export function getSearchControllers(): PokemonSearchControllers {
     },
   });
 
+  const { registerAdvancedSearchQueries } = loadAdvancedSearchQueryActions(engine);
+  engine.dispatch(registerAdvancedSearchQueries({ cq: '@pokedexnumber' }));
+
   const searchBox = buildSearchBox(engine, {
     options: {
       numberOfSuggestions: 6,
@@ -65,7 +69,7 @@ export function getSearchControllers(): PokemonSearchControllers {
 
   const resultList = buildResultList(engine, {
     options: {
-      fieldsToInclude: [...POKEMON_FIELDS],
+      fieldsToInclude: [...POKEMON_FIELDS, 'permanentid'],
     },
   });
 
