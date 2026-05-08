@@ -9,6 +9,7 @@ import { ResultList } from '../components/ResultList';
 import { StaticFacet } from '../components/StaticFacet';
 import { JockeyCard } from '../components/JockeyCard';
 import { ModeToggle } from '../components/ModeToggle';
+import { SortDropdown } from '../components/SortDropdown';
 import {
   JOCKEY_COLLECTIONS,
   JOCKEY_FABRICATIONS,
@@ -80,12 +81,17 @@ export function SearchPage() {
         </aside>
 
         <section>
-          <div className="flex items-baseline justify-between mb-4">
+          <div className="flex items-center justify-between gap-4 mb-4 flex-wrap">
             <h2 className="text-lg font-semibold text-slate-800">
               {isJockey || resultListState.firstSearchExecuted
                 ? `${totalCount.toLocaleString()} ${itemNoun}`
                 : 'Loading...'}
             </h2>
+            {isJockey ? (
+              <SortDropdown mode="jockey" />
+            ) : (
+              <SortDropdown mode="pokemon" controller={controllers.sort} />
+            )}
           </div>
 
           {isJockey ? (

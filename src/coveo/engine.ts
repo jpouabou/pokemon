@@ -5,6 +5,7 @@ import {
   buildResultList,
   buildPager,
   buildResultsPerPage,
+  buildSort,
   getOrganizationEndpoints,
   loadAdvancedSearchQueryActions,
   type SearchEngine,
@@ -13,6 +14,7 @@ import {
   type ResultList,
   type Pager,
   type ResultsPerPage,
+  type Sort,
 } from '@coveo/headless';
 import { COVEO_CONFIG, POKEMON_FIELDS } from './config';
 
@@ -24,6 +26,7 @@ export interface PokemonSearchControllers {
   resultList: ResultList;
   pager: Pager;
   resultsPerPage: ResultsPerPage;
+  sort: Sort;
 }
 
 let cached: PokemonSearchControllers | null = null;
@@ -77,6 +80,7 @@ export function getSearchControllers(): PokemonSearchControllers {
   const resultsPerPage = buildResultsPerPage(engine, {
     initialState: { numberOfResults: 24 },
   });
+  const sort = buildSort(engine);
 
   cached = {
     engine,
@@ -86,6 +90,7 @@ export function getSearchControllers(): PokemonSearchControllers {
     resultList,
     pager,
     resultsPerPage,
+    sort,
   };
   return cached;
 }
