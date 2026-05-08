@@ -4,9 +4,10 @@ import { useControllerState } from '../hooks/useController';
 
 interface Props {
   controller: HeadlessSearchBox;
+  placeholder?: string;
 }
 
-export function SearchBox({ controller }: Props) {
+export function SearchBox({ controller, placeholder }: Props) {
   const state = useControllerState(controller);
   const [focused, setFocused] = useState(false);
   const blurTimer = useRef<number | null>(null);
@@ -50,7 +51,7 @@ export function SearchBox({ controller }: Props) {
             onBlur={() => {
               blurTimer.current = window.setTimeout(() => setFocused(false), 150);
             }}
-            placeholder="Search Pokemon by name, type, ability..."
+            placeholder={placeholder ?? 'Search Pokemon by name, type, ability...'}
             className="flex-1 px-3 py-3 bg-transparent rounded-full focus:outline-none text-slate-900 placeholder:text-slate-400"
           />
           {state.value && (
